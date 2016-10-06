@@ -1,6 +1,7 @@
 package com.simpleweather.app.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -45,6 +46,10 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         temp1TextView = (TextView) findViewById(R.id.temp1);
         temp2TextView = (TextView) findViewById(R.id.temp2);
         currentDateTextView = (TextView) findViewById(R.id.current_date);
+        switchCityBtn = (Button) findViewById(R.id.switch_city_btn);
+        refreshWeatherBtn = (Button) findViewById(R.id.refresh_weather_btn);
+        switchCityBtn.setOnClickListener(this);
+        refreshWeatherBtn.setOnClickListener(this);
         String countyCode = getIntent().getStringExtra("county_code");
         if (!TextUtils.isEmpty(countyCode)) {
             publishTimeTextView.setText("synchronizing...");
@@ -109,6 +114,21 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.switch_city_btn:
+                Intent intent = new Intent(WeatherActivity.this, ChooseAreaActivity.class);
+                intent.putExtra("from_weather_activity", true);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.refresh_weather_btn:
+                publishTimeTextView.setText("Synchronizing...");
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                if (!TextUtils.isEmpty(preferences.getString("weather_code", ""))) {
+                    queryWeatherInfo(preferences.getString("weather_code", ""));
+                }
+                break;
+            default: break;
+        }
     }
 }
