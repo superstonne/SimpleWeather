@@ -35,7 +35,7 @@ public class WeatherAutoUpdateService extends Service {
             @Override
             public void run() {
                 updateWeather();
-                Log.d(TAG, "Updating weather...");
+                Log.d(TAG, "Updating logo...");
             }
         }).start();
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
